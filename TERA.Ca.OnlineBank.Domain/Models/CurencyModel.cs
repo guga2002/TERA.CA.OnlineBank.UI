@@ -9,8 +9,8 @@ namespace TERA.Ca.OnlineBank.Domain.Models
 
         public decimal Equvalent { get; set; }
 
-        public virtual List<int> TransactionIds { get; set; }
+        public virtual List<Guid> TransactionIds { get; set; }
 
-        public virtual List<int> WalletIds { get; set; }
+        public virtual List<Guid> WalletIds { get; set; }
     }
 }

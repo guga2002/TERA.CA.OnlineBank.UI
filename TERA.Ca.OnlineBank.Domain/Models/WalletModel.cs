@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TERA.Ca.OnlineBank.Domain.Models
 {
-    internal class WalletModel
+    public class WalletModel
     {
         public decimal Amount { get; set; }
         public Guid UserId { get; set; }
