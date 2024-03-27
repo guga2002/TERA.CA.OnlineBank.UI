@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Transactions;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TERA.Ca.OnlineBank.Domain.Models
 {
@@ -9,8 +8,8 @@ namespace TERA.Ca.OnlineBank.Domain.Models
 
         public decimal Equvalent { get; set; }
 
-        public virtual List<Guid> TransactionIds { get; set; }
+        public virtual List<Guid>? TransactionIds { get; set; }
 
-        public virtual List<Guid> WalletIds { get; set; }
+        public virtual List<Guid>? WalletIds { get; set; }
     }
 }

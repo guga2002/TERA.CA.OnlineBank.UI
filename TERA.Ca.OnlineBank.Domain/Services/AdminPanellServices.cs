@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TERA.Ca.OnlineBank.Domain.Interfaces;
+using TERA.Ca.OnlineBank.Domain.Models;
 using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
 
@@ -21,22 +17,22 @@ namespace TERA.Ca.OnlineBank.Domain.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> AsignToRole(string Id, string Role)
+        public Task<bool> AsignToRole(AssignRoleModel model)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteCurency(Curency entoty)
+        public Task<bool> DeleteCurency(CurencyModel entoty)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> InsertCurency(Curency entity)
+        public Task<bool> InsertCurency(CurencyModel entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateCurency(Curency entity)
+        public Task<bool> UpdateCurency(CurencyModel entity)
         {
             throw new NotImplementedException();
         }

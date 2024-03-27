@@ -1,13 +1,14 @@
-﻿using TERA.CA.OnlineBank.Core.Entities;
+﻿using TERA.Ca.OnlineBank.Domain.Models;
+using TERA.CA.OnlineBank.Core.Entities;
 
 namespace TERA.Ca.OnlineBank.Domain.Interfaces
 {
     public interface IAdminPanell
     {
         Task<bool> AddRole(string role);
-        Task<bool> AsignToRole(string Id, string Role);
-        Task<bool> InsertCurency(Curency entity);
-        Task<bool> UpdateCurency(Curency entity);
-        Task<bool> DeleteCurency(Curency entoty);
+        Task<bool> AsignToRole(AssignRoleModel model);
+        Task<bool> InsertCurency(CurencyModel entity);
+        Task<bool> UpdateCurency(CurencyModel entity);
+        Task<bool> DeleteCurency(CurencyModel entoty);
     }
 }

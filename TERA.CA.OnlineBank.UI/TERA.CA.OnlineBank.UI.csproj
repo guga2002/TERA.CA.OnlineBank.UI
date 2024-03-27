@@ -21,11 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TERA.CA.OnlineBank.Core\TERA.CA.OnlineBank.Core.csproj" />
+    <ProjectReference Include="..\TERA.Ca.OnlineBank.Domain\TERA.Ca.OnlineBank.Domain.csproj" />
   </ItemGroup>
 
 </Project>
