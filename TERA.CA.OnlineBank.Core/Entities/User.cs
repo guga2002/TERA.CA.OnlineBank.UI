@@ -20,5 +20,7 @@ namespace TERA.CA.OnlineBank.Core.Entities
         [Required]
         [Column("Personal_Number")]
         public string PersonalNumber { get; set; }
+
+        public virtual IEnumerable<Wallet> Wallets { get; set; }
     }
 }
