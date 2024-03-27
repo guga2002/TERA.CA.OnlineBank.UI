@@ -45,12 +45,12 @@ namespace TERA.CA.OnlineBank.UI.Controllers
         }
 
         [HttpPost]
-        [Route("Role")]
+        [Route("Role/Assign")]
         public async Task<IActionResult> AsignToRole(AssignRoleModel model)
         {
             try
             {
-                if(!ModelState.IsValid||model.Id is null ||model.Role is null)
+                if(!ModelState.IsValid||model.UserID is null ||model.Role is null)
                 {
                     logger.LogError("MoDel State Is not Valid");
                     return BadRequest();

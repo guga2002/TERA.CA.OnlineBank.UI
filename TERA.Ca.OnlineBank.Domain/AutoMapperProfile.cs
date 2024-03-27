@@ -9,11 +9,9 @@ namespace TERA.Ca.OnlineBank.Domain
         public AutoMapperProfile()
         {
             CreateMap<Curency, CurencyModel>()
-             .ForMember(dest => dest.TransactionIds, opt => opt.MapFrom(src => src.Transactions.Select(t => t.Id)))
              .ForMember(dest => dest.WalletIds, opt => opt.MapFrom(src => src.wallets.Select(w => w.Id)));
 
             CreateMap<CurencyModel, Curency>()//sxva velebi avtomaturad gadaimapeba
-                .ForMember(dest => dest.Transactions, opt => opt.Ignore())
                 .ForMember(dest => dest.wallets, opt => opt.Ignore());
 
             CreateMap<Transaction, TransactionModel>().

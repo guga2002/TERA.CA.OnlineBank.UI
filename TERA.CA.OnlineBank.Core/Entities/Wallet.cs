@@ -3,20 +3,18 @@
 namespace TERA.CA.OnlineBank.Core.Entities
 {
     [Table("Wallets")]
-    public class Wallet:AbstractEntity
+    public class Wallet : AbstractEntity
     {
         [Column("Balance")]
         public decimal Amount { get; set; }
 
-
         [ForeignKey("User")]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
+        [ForeignKey("Currency")]
+        public Guid CurrencyId { get; set; }
 
-        [ForeignKey("Curency")]
-        public Guid CurencyId { get; set; }
-
-        public Curency Curency { get; set; }
+        public Curency Currency { get; set; }
 
         public User User { get; set; }
 

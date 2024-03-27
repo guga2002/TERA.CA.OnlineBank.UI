@@ -18,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<WalletDb>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("WalletDb"));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("TerasConnect"));
 });
 
 builder.Services.AddIdentity<User, IdentityRole>().

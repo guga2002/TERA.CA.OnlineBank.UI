@@ -13,8 +13,6 @@ namespace TERA.CA.OnlineBank.Core.Entities
         [Column("Course_In_Gel")]
         public decimal Equvalent { get; set; }
 
-        public virtual IEnumerable<Transaction> Transactions { get; set; }
-
-        public  IEnumerable<Wallet> wallets { get; set; }
+        public virtual IEnumerable<Wallet> wallets { get; set; }
     }
 }

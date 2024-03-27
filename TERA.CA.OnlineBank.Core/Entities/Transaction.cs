@@ -5,7 +5,8 @@ namespace TERA.CA.OnlineBank.Core.Entities
 {
     [Table("Transactions")]
     [Index(nameof(Date))]
-    public class Transaction:AbstractEntity
+    [Index(nameof(ReceiverWalletId),IsUnique =true)]
+    public class Transaction : AbstractEntity
     {
         [Column("Amount_Transfered")]
         public decimal Amount { get; set; }
@@ -13,19 +14,12 @@ namespace TERA.CA.OnlineBank.Core.Entities
         [Column("Date_Of_Transaction")]
         public DateTime Date { get; set; }
 
-        [ForeignKey("WalletSender")]
-        public Guid SenderId { get; set; }
+        [ForeignKey("Wallet")]
+        public Guid SenderId{ get; set; }
 
-        [ForeignKey("WalletReciever")]
-        public Guid RecieverId { get; set; }
-        [ForeignKey("Curency")]
-        public Guid CurencyId { get; set; }
+        [Column("Reciever_ID")]
+        public Guid ReceiverWalletId { get; set; }//shevamowmebt  vis vuricxavt
 
-        public Wallet WalletSender { get; set; }
-
-        public Wallet WalletReciever { get; set; }
-
-        public  Curency Curency { get; set; }
-
+        public Wallet Wallet { get; set; }
     }
 }

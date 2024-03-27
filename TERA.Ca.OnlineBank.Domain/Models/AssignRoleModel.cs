@@ -8,7 +8,7 @@ namespace TERA.Ca.OnlineBank.Domain.Models
 {
     public class AssignRoleModel
     {
-        public string Id { get; set; }
+        public string UserID { get; set; }
         public string Role { get; set; }
     }
 }
