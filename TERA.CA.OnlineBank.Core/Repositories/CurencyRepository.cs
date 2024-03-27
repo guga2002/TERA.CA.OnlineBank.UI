@@ -5,9 +5,9 @@ using TERA.CA.OnlineBank.Core.Interfaces;
 
 namespace TERA.CA.OnlineBank.Core.Repositories
 {
-    public class CurencyRepository : AbstractRepository<CurencyRepository>, ICurencyRepository
+    public class CurencyRepository : AbstractRepository, ICurencyRepository
     {
-        public CurencyRepository(WalletDb db, ILogger<CurencyRepository> log) : base(db, log)
+        public CurencyRepository(WalletDb db) : base(db)
         {
         }
 

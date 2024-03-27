@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-using TERA.CA.OnlineBank.Core.Data;
+﻿using TERA.CA.OnlineBank.Core.Data;
 using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
 
 namespace TERA.CA.OnlineBank.Core.Repositories
 {
-    public class WalletRepository : AbstractRepository<WalletRepository>, IWalletRepository
+    public class WalletRepository : AbstractRepository, IWalletRepository
     {
-        public WalletRepository(WalletDb db, ILogger<WalletRepository> log) : base(db, log)
+        public WalletRepository(WalletDb db) : base(db)
         {
         }
 
