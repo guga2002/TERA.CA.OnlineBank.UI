@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System.Transactions;
+﻿using System.Transactions;
 using TERA.CA.OnlineBank.Core.Data;
 using TERA.CA.OnlineBank.Core.Interfaces;
 

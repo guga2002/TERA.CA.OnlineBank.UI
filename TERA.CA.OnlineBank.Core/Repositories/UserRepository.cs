@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using TERA.CA.OnlineBank.Core.Data;
 using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
@@ -7,8 +8,14 @@ namespace TERA.CA.OnlineBank.Core.Repositories
 {
     public class UserRepository : AbstractRepository, IUserRepository
     {
-        public UserRepository(WalletDb db) : base(db)
+        private readonly UserManager<User> _UserManager;
+        private readonly RoleManager<IdentityRole> _RoleManager;
+        private readonly SignInManager<User> _SignInManager;
+        public UserRepository(WalletDb db,UserManager<User>manageusers,SignInManager<User>managesign,RoleManager<IdentityRole>rolemanager) : base(db)
         {
+            this._SignInManager = managesign;
+            this._RoleManager = rolemanager;
+            this._UserManager = manageusers;
         }
 
         public Task<bool> AddRole(string role)
