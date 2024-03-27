@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TERA.Ca.OnlineBank.Domain;
+using TERA.Ca.OnlineBank.Domain.Interfaces;
+using TERA.Ca.OnlineBank.Domain.Services;
 using TERA.CA.OnlineBank.Core.Data;
 using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
@@ -53,8 +56,15 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 
+builder.Services.AddScoped<IAdminPanell, AdminPanellServices>();
+builder.Services.AddScoped<IOnlineBankServices, OnlineBankServices>();
+builder.Services.AddScoped<IUserServices, UserService>();
+builder.Services.AddScoped<IWalletServices, WalletServices>();
+
 builder.Logging.AddConsole();
 builder.Logging.AddProvider(new LoggerProvider());
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
