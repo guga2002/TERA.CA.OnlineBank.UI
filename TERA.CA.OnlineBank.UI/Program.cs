@@ -8,6 +8,7 @@ using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
 using TERA.CA.OnlineBank.Core.Repositories;
 using TERA.CA.OnlineBank.UI.Hellpers;
+using TERA.CA.OnlineBank.UI.LoggerConfigurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +53,8 @@ builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
 
-
+builder.Logging.AddConsole();
+builder.Logging.AddProvider(new LoggerProvider());
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
