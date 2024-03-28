@@ -47,6 +47,17 @@ namespace TERA.Ca.OnlineBank.Domain.Services
             return res;
         }
 
+        public async Task<bool> CreateTransactionType(TransactionTypeModel entity)
+        {
+            if (entity is null)
+            {
+                throw new OnlineWalletException("Entity can not be null");
+            }
+            var mapped=mapper.Map<TransactionType>(entity);
+            var res= await work.TransactionType.Create(mapped);
+            return res;
+        }
+
         public async Task<bool> Delete(Guid entoty)//deletes curency
         {
             var curenc = await work.CurencyRepository.GetById(entoty.ToString());
@@ -62,6 +73,17 @@ namespace TERA.Ca.OnlineBank.Domain.Services
             return false;
         }
 
+
+        public async Task<bool> DeleteTransactionType(TransactionTypeModel entoty)
+        {
+            if(entoty==null)
+            {
+                throw new OnlineWalletException("error while deleting , argument is null");
+            }
+            var mapped = mapper.Map<TransactionType>(entoty);
+            var res=await work.TransactionType.Delete(mapped);
+            return res;
+        }
 
         public async Task<bool> DeleteUser(Guid Id)
         {
@@ -95,6 +117,17 @@ namespace TERA.Ca.OnlineBank.Domain.Services
                 return mapped;
             }
             return new CurencyModel();
+        }
+
+        public async Task<TransactionTypeModel> GetByIdTransactionType(string Id)
+        {
+            var res = await work.TransactionType.GetById(Id);
+            if(res!=null)
+            {
+                var mapped = mapper.Map<TransactionTypeModel>(res);
+                return mapped;
+            }
+            return new TransactionTypeModel();
         }
 
         public async Task<bool> ModifyUser(string PersonalNumber, UserModel NewInfo)

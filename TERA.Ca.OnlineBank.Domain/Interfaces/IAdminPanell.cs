@@ -11,5 +11,8 @@ namespace TERA.Ca.OnlineBank.Domain.Interfaces
         Task<bool> ResetPassword(ResetPasswordModel model);
         Task<bool> ModifyUser(string PersonalNumber, UserModel NewInfo);
         Task<bool> DeleteUser(Guid Id);
+        Task<bool> CreateTransactionType(TransactionTypeModel entity);
+        Task<bool> DeleteTransactionType(TransactionTypeModel entoty);
+        Task<TransactionTypeModel> GetByIdTransactionType(string Id);
     }
 }

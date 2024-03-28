@@ -29,6 +29,8 @@ namespace TERA.CA.OnlineBank.Core.Repositories
 
         public IWalletRepository WalletRepository => new WalletRepository(Context,Walletlog);
 
+        public ITransactionType TransactionType => new TransactionTypeRepository(Context);
+
         public void Dispose()
         {
             Context.Dispose();
