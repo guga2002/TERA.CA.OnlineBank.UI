@@ -115,6 +115,7 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         public async Task<bool> Register(User user, string Password)
         {
            await  _UserManager.CreateAsync(user, Password);
+           await _UserManager.AddToRoleAsync(user, "POWEREDUSER");
             _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
             return true;
         }

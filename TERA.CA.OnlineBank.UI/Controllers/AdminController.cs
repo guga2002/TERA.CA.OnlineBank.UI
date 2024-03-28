@@ -99,6 +99,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
         }
         [HttpGet]
         [Route("Currency")]
+        [AllowAnonymous]
         public async Task<IActionResult> GellAllCurency()
         {
             try
@@ -122,6 +123,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
 
         [HttpGet]
         [Route("Currency/{Id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllById(Guid Id)
         {
             try

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TERA.Ca.OnlineBank.Domain.Interfaces
+﻿namespace TERA.Ca.OnlineBank.Domain.Interfaces
 {
     public interface ICrudService<T>where T:class
     {

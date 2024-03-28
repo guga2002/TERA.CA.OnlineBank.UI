@@ -1,6 +1,4 @@
-﻿using MongoDB.Driver;
-using TERA.Ca.OnlineBank.Domain.Models;
-using TERA.CA.OnlineBank.Core.Entities;
+﻿using TERA.Ca.OnlineBank.Domain.Models;
 
 namespace TERA.Ca.OnlineBank.Domain.Interfaces
 {

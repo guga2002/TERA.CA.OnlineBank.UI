@@ -15,12 +15,14 @@ using TERA.CA.OnlineBank.UI.LoggerConfigurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+#region DbContexts
 builder.Services.AddDbContext<WalletDb>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("TerasConnect"));
 });
+#endregion
 
+#region Identity Configurations
 builder.Services.AddIdentity<User, IdentityRole>().
 AddEntityFrameworkStores<WalletDb>().
 AddDefaultTokenProviders();
@@ -45,7 +47,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             };
         }
     });
+#endregion
 
+#region DI Container
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<SignInManager<User>>();
@@ -61,11 +65,14 @@ builder.Services.AddScoped<IAdminPanell, AdminPanellServices>();
 builder.Services.AddScoped<IOnlineBankServices, OnlineBankServices>();
 builder.Services.AddScoped<IUserServices, UserService>();
 builder.Services.AddScoped<IWalletServices, WalletServices>();
+builder.Services.AddScoped<IStatisticServices, StatisticServices>();
+#endregion
 
+#region Illogger and AutoMapper Config
 builder.Logging.AddConsole();
 builder.Logging.AddProvider(new LoggerProvider());
-
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+#endregion
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
