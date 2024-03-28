@@ -92,7 +92,7 @@ namespace TERA.CA.OnlineBank.Core.Repositories
 
         public async Task<Wallet> GetById(string Id)
         {
-            return await wallet.FindAsync(Id)??new Wallet();
+            return await wallet.FirstOrDefaultAsync(io=>io.Id==Guid.Parse(Id))??new Wallet();
         }
 
         public async Task<Wallet> GetByIdWithDetails(Guid Id)

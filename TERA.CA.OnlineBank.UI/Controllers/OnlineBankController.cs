@@ -25,23 +25,21 @@ namespace TERA.CA.OnlineBank.UI.Controllers
         {
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                if (!ModelState.IsValid || userId == null)
+                if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(mod);
                 }
-                mod.SenderId = Guid.Parse(userId);
                 var res = await ser.TransferMoney(mod);
                 if(!res)
                 {
-                    return NotFound();
+                    return NotFound("not found");
                 }
                 return Ok(res);
             }
             catch (Exception exp)
             {
                 logger.LogCritical(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
         [HttpGet]
@@ -53,19 +51,19 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (!ModelState.IsValid||userId==null)
                 {
-                    return BadRequest();
+                    return BadRequest(userId);
                 }
                 var res = await ser.CheckBalance(Guid.Parse(userId));
                 if(res==null)
                 {
-                    return NotFound();
+                    return NotFound("not found");
                 }
                 return Ok(res);
             }
             catch (Exception exp)
             {
                 logger.LogCritical(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
         [HttpGet]
@@ -77,20 +75,20 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (!ModelState.IsValid||userId==null)
                 {
-                    return BadRequest();
+                    return BadRequest(userId);
                 }
                
                 var res = await ser.CheckProfile(Guid.Parse(userId));
                 if (res == null)
                 {
-                    return NotFound();
+                    return NotFound("not found");
                 }
                 return Ok(res);
             }
             catch (Exception exp)
             {
                 logger.LogCritical(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
     }

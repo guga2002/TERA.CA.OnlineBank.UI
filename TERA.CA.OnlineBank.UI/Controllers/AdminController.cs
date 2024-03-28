@@ -19,7 +19,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             this.logger = Logger;
         }
 
-        [HttpGet("JUSTTESTING")]
+        [HttpGet("CurencUserIDJustForTesting")]
         [AllowAnonymous]
         public IActionResult testing()
         {
@@ -40,7 +40,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 var result = await service.AddRole(roleName);
                 if(!result)
                 {
-                    return NotFound();
+                    return NotFound("not found");
                 }
                 logger.LogInformation("Successfully  add role to DB");
                 return Ok(result); 
@@ -48,7 +48,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogCritical(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
 
         }
@@ -62,13 +62,13 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if(!ModelState.IsValid||model.UserID is null ||model.Role is null)
                 {
                     logger.LogError("MoDel State Is not Valid");
-                    return BadRequest();
+                    return BadRequest("MoDel State Is not Valid");
                 }
                 var res = await service.AsignToRole(model);
                 if(!res)
                 {
                     logger.LogCritical("no role assigned");
-                    return BadRequest();
+                    return BadRequest("no role assigned");
                 }
                 logger.LogInformation("Successfully assigned role");
                 return Ok(res);
@@ -76,7 +76,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
         [HttpPost]
@@ -88,13 +88,13 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (!ModelState.IsValid || entity.Name is null)
                 {
                     logger.LogError("MoDel State Is not Valid");
-                    return BadRequest();
+                    return BadRequest("MoDel State Is not Valid");
                 }
                 var res = await service.Create(entity);
                 if (!res)
                 {
                     logger.LogCritical("No Curency inserted to db");
-                    return BadRequest();
+                    return BadRequest("No Curency inserted to db");
                 }
                 logger.LogInformation("Successfully Inserted");
                 return Ok(res);
@@ -102,7 +102,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
 
         }
@@ -117,7 +117,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (res==null)
                 {
                     logger.LogCritical("No Curency Deleted to db");
-                    return BadRequest();
+                    return BadRequest("No Curency Deleted to db");
                 }
                 logger.LogInformation("Successfully Deleted!");
                 return Ok(res);
@@ -125,7 +125,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
 
         }
@@ -141,7 +141,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (res != null)
                 {
                     logger.LogCritical("No Curency Deleted to db");
-                    return BadRequest();
+                    return BadRequest("No Curency Deleted to db");
                 }
                 logger.LogInformation("Successfully Deleted!");
                 return Ok(res);
@@ -149,7 +149,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
 
         }
@@ -163,13 +163,13 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (!ModelState.IsValid || entity.Name is null)
                 {
                     logger.LogError("MoDel State Is not Valid");
-                    return BadRequest();
+                    return BadRequest("MoDel State Is not Valid");
                 }
                 var res = await service.Update(entity);
                 if (!res)
                 {
                     logger.LogCritical("No Curency Updated to db");
-                    return BadRequest();
+                    return BadRequest("No Curency Updated to db");
                 }
                 logger.LogInformation("Successfully Updated!");
                 return Ok(res);
@@ -177,7 +177,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
         [HttpDelete]
@@ -189,13 +189,13 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (!ModelState.IsValid )
                 {
                     logger.LogError("MoDel State Is not Valid");
-                    return BadRequest();
+                    return BadRequest("MoDel State Is not Valid");
                 }
                 var res = await service.Delete(Id);
                 if (!res)
                 {
                     logger.LogCritical("No Curency Deleted to db");
-                    return BadRequest();
+                    return BadRequest("No Curency Deleted to db");
                 }
                 logger.LogInformation("Successfully Deleted!");
                 return Ok(res);
@@ -203,7 +203,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
         [HttpPatch]
@@ -216,7 +216,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (res==false)
                 {
                     logger.LogCritical("No password Reseted");
-                    return BadRequest();
+                    return BadRequest("No password Reseted");
                 }
                 logger.LogInformation("Successfully Reseted!");
                 return Ok(res);
@@ -224,7 +224,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
         [HttpPut]
@@ -237,7 +237,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (!res)
                 {
                     logger.LogCritical("No user Modified");
-                    return BadRequest();
+                    return BadRequest("No user Modified");
                 }
                 logger.LogInformation("User Modified");
                 return Ok(res);
@@ -245,7 +245,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
 
         }
@@ -260,7 +260,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (!res)
                 {
                     logger.LogCritical("No TransactionType Modified");
-                    return BadRequest();
+                    return BadRequest("No TransactionType Modified");
                 }
                 logger.LogInformation("Transactiontype Modified");
                 return Ok(res);
@@ -268,7 +268,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
 
@@ -282,7 +282,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (!res)
                 {
                     logger.LogCritical("No TransactionType Deleted");
-                    return BadRequest();
+                    return BadRequest("No TransactionType Deleted");
                 }
                 logger.LogInformation("Transactiontype Deleted");
                 return Ok(res);
@@ -290,7 +290,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
 
@@ -305,14 +305,14 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 if (res == null)
                 {
                     logger.LogInformation("No records exist");
-                    return NotFound();
+                    return NotFound("No records exist");
                 }
                 return Ok(res);
             }
             catch (Exception exp)
             {
                 logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
     }

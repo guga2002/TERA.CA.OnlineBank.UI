@@ -81,6 +81,7 @@ namespace TERA.Ca.OnlineBank.Domain.Services
                 var mapped = mapper.Map<TERA.CA.OnlineBank.Core.Entities.Transaction>(mod);
                 var result = await work.TransactionRepository.Create(mapped);
                 logger.LogInformation("succesfully transfered money");
+                await work.SaveChanges();
                 return result;
             }
             catch (Exception exp)

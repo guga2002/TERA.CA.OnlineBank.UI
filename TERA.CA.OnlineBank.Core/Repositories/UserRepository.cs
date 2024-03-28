@@ -166,12 +166,8 @@ namespace TERA.CA.OnlineBank.Core.Repositories
 
         public async  Task<bool> Signout()
         {
-            if (_SignInManager.IsSignedIn(ClaimsPrincipal.Current))
-            {
                 await _SignInManager.SignOutAsync();
                 return true;
-            }
-            return false;
         }
     }
 }

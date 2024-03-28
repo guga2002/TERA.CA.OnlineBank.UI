@@ -34,12 +34,12 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 {
                     return Ok(res);
                 }
-                return NotFound();
+                return NotFound("not found");
             }
             catch (Exception exp)
             {
                 log.LogCritical(exp.Message);
-                return BadRequest(exp);
+                return BadRequest(exp.Message);
             }
         }
 
@@ -57,17 +57,17 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 {
                     return Ok(res);
                 }
-                return NotFound();
+                return NotFound("not found");
             }
             catch (Exception exp)
             {
                 log.LogCritical(exp.Message);
-                return BadRequest(exp);
+                return BadRequest(exp.Message);
             }
         }
 
         [HttpDelete]
-        [Route("/{WalletId}")]
+        [Route("Remove/{WalletId}")]
         [Authorize(Roles ="ADMIN")]
         public async Task<IActionResult> Delete(Guid WalletId)
         {
@@ -82,7 +82,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 {
                     return Ok(res);
                 }
-                return NotFound();
+                return NotFound("not found");
             }
             catch (Exception exp)
             {
@@ -92,7 +92,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
         }
 
         [HttpGet]
-        [Route("/{WalletId}")]
+        [Route("Detail/{WalletId}")]
         [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetByIdWithDetails(Guid WalletId)
         {
@@ -107,7 +107,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 {
                     return Ok(res);
                 }
-                return NotFound();
+                return NotFound("not found");
             }
             catch (Exception exp)
             {
@@ -131,7 +131,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 {
                     return Ok(res);
                 }
-                return NotFound();
+                return NotFound("not found");
             }
             catch (Exception exp)
             {
