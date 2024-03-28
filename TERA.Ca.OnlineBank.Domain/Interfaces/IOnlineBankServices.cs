@@ -11,7 +11,7 @@ namespace TERA.Ca.OnlineBank.Domain.Interfaces
     public interface IOnlineBankServices
     {
         Task<bool> TransferMoney(TransactionModel mod);
-        Task<BalanceModel> CheckBalance(Guid Userid);
+        Task<WalletModel> CheckBalance(Guid Userid);
         Task<UserModel>CheckProfile(Guid Userid);
 
     }

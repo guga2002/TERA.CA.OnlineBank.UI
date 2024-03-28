@@ -2,6 +2,7 @@
 using System.Transactions;
 using TERA.Ca.OnlineBank.Domain.Interfaces;
 using TERA.Ca.OnlineBank.Domain.Models;
+using TERA.Ca.OnlineBank.Domain.Validations;
 using TERA.CA.OnlineBank.Core.Interfaces;
 
 namespace TERA.Ca.OnlineBank.Domain.Services
@@ -12,19 +13,49 @@ namespace TERA.Ca.OnlineBank.Domain.Services
         {
         }
 
-        public Task<BalanceModel> CheckBalance(Guid Userid)
+        public async Task<WalletModel> CheckBalance(Guid Userid)
         {
-            throw new NotImplementedException();
+            var Walet = await work.WalletRepository.GetAllWithDetails();
+            if (Walet != null) {
+                var specify = Walet.FirstOrDefault(io => io.UserId == Userid.ToString());
+                if (specify != null)
+                {
+                    var mapped = mapper.Map<WalletModel>(specify);
+                    return mapped;
+                }
+            }
+            return new WalletModel();
         }
 
-        public Task<UserModel> CheckProfile(Guid Userid)
+        public async Task<UserModel> CheckProfile(Guid Userid)
         {
-            throw new NotImplementedException();
+            var res = await work.UserRepository.GetById(Userid.ToString());
+            if (res != null)
+            {
+                var mapped = mapper.Map<UserModel>(res);
+                return mapped;
+            }
+            return new UserModel();
         }
 
-        public Task<bool> TransferMoney(TransactionModel mod)
+        public async Task<bool> TransferMoney(TransactionModel mod)
         {
-            throw new NotImplementedException();
+            if(mod==null||mod.Amount<=0)
+            {
+                throw new OnlineWalletException("Amount can not be null");
+            }
+            var sender = await work.WalletRepository.GetById(mod.SenderId.ToString());
+            var reciever = await work.WalletRepository.GetById(mod.RecieverId.ToString());
+            if(sender.Amount<=mod.Amount)
+            {
+                throw new OnlineWalletException("no enought balance");
+            }
+            sender.Amount -= mod.Amount;
+            reciever.Amount += mod.Amount;
+            await work.SaveChanges();
+            var mapped = mapper.Map<TERA.CA.OnlineBank.Core.Entities.Transaction>(mod);
+            var result= await work.TransactionRepository.Create(mapped);
+            return result;
         }
     }
 }
