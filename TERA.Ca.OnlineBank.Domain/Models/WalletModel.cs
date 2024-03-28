@@ -8,6 +8,5 @@
 
         public Guid CurencyId { get; set; }
 
-        public List<Guid>? TransactionIds { get; set; }
     }
 }

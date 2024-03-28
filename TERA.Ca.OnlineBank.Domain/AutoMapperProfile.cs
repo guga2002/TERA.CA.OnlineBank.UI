@@ -9,25 +9,32 @@ namespace TERA.Ca.OnlineBank.Domain
         public AutoMapperProfile()
         {
             CreateMap<Curency, CurencyModel>()
-             .ForMember(dest => dest.WalletIds, opt => opt.MapFrom(src => src.wallets.Select(w => w.Id)));
-
-            CreateMap<CurencyModel, Curency>()//sxva velebi avtomaturad gadaimapeba
-                .ForMember(dest => dest.wallets, opt => opt.Ignore());
+                .ForMember(des => des.Name, opt => opt.MapFrom(sr => sr.Name)).
+                ForMember(des => des.Equvalent, opt => opt.MapFrom(sr => sr.Equvalent))
+                .ReverseMap();
 
             CreateMap<Transaction, TransactionModel>().
-                ReverseMap();
+                ForMember(des=>des.Amount,opt=>opt.MapFrom(sr=>sr.Amount)).
+                 ForMember(des => des.Date, opt => opt.MapFrom(sr => sr.Date)).
+                  ForMember(des => des.RecieverId, opt => opt.MapFrom(sr => sr.ReceiverWalletId)).
+                   ForMember(des => des.SenderId, opt => opt.MapFrom(sr => sr.SenderId)).
+                 ReverseMap();
 
             CreateMap<Wallet, WalletModel>()
-            .ForMember(dest => dest.TransactionIds, opt => opt.MapFrom(src => src.Transactions.Select(t => t.Id)));
-
-            CreateMap<WalletModel, Wallet>()
-                .ForMember(dest => dest.Transactions, opt => opt.Ignore());
+            .ForMember(dest => dest.Amount, opt => opt.MapFrom(src => src.Amount))
+            .ForMember(dest=>dest.CurencyId,opt=>opt.MapFrom(io=>io.CurrencyId))
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(io => io.UserId))
+            .ReverseMap();
 
             CreateMap<User, UserModel>()
-           .ForMember(dest => dest.Password, opt => opt.Ignore());
+           .ForMember(dest => dest.Password, opt => opt.Ignore()).
+           ForMember(des => des.Name, opt => opt.MapFrom(io => io.Name)).
+           ForMember(des => des.Surname, opt => opt.MapFrom(io => io.Surname)).
+           ForMember(des => des.Username, opt => opt.MapFrom(io => io.UserName)).
+           ForMember(des => des.Email, opt => opt.MapFrom(io => io.Email)).
+             ForMember(des => des.PersonalNumber, opt => opt.MapFrom(io => io.PersonalNumber))
+             .ReverseMap();
 
-            CreateMap<UserModel, User>()
-                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
         }
     }
 }

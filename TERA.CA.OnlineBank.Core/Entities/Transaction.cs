@@ -20,6 +20,10 @@ namespace TERA.CA.OnlineBank.Core.Entities
         [Column("Reciever_ID")]
         public Guid ReceiverWalletId { get; set; }//shevamowmebt  vis vuricxavt
 
+        [ForeignKey("Type")]
+        public Guid TypeId { get; set; }
+        public TransactionType Type { get; set; }
+
         public Wallet Wallet { get; set; }
     }
 }

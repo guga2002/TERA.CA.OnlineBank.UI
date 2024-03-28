@@ -7,7 +7,5 @@ namespace TERA.Ca.OnlineBank.Domain.Models
         public string Name { get; set; }
 
         public decimal Equvalent { get; set; }
-
-        public virtual List<Guid>? WalletIds { get; set; }
     }
 }
