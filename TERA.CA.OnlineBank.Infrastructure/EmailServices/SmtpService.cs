@@ -16,7 +16,7 @@ namespace TERA.CA.OnlineBank.Infrastructure.EmailServices
             senderEmail = "hitheretera@gmail.com";
         }
 
-        public void SendMesaage(string to, string body, string subject)
+        public void SendMesaage(string to,string subject, string body)
         {
 
             var smtpClient = new SmtpClient("smtp.gmail.com")
