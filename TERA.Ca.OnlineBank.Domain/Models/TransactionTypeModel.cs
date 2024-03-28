@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TERA.Ca.OnlineBank.Domain.Models
 {
     public class TransactionTypeModel
     {
+
         [Required]
-        [MaxLength(50)]
+        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "TransactionName Is not valid")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "TransactionName  is not valid")]
         public string TransactionName { get; set; }
+
+        public override string ToString()
+        {
+            return $"TransactionName {TransactionName}";
+        }
     }
 }

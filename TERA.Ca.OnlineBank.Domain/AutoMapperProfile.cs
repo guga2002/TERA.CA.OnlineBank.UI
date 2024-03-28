@@ -18,6 +18,8 @@ namespace TERA.Ca.OnlineBank.Domain
                  ForMember(des => des.Date, opt => opt.MapFrom(sr => sr.Date)).
                   ForMember(des => des.RecieverId, opt => opt.MapFrom(sr => sr.ReceiverWalletId)).
                    ForMember(des => des.SenderId, opt => opt.MapFrom(sr => sr.SenderId)).
+                   ForMember(des => des.CurencyId, opt => opt.MapFrom(sr => sr.Wallet.CurrencyId)).
+                   ForMember(des => des.TypeId, opt => opt.MapFrom(sr => sr.TypeId)).
                  ReverseMap();
 
             CreateMap<Wallet, WalletModel>()
@@ -26,14 +28,18 @@ namespace TERA.Ca.OnlineBank.Domain
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(io => io.UserId))
             .ReverseMap();
 
-            CreateMap<User, UserModel>()
-           .ForMember(dest => dest.Password, opt => opt.Ignore()).
+            CreateMap<User, UserModel>().
+           ForMember(dest => dest.Password, opt => opt.Ignore()).
            ForMember(des => des.Name, opt => opt.MapFrom(io => io.Name)).
            ForMember(des => des.Surname, opt => opt.MapFrom(io => io.Surname)).
            ForMember(des => des.Username, opt => opt.MapFrom(io => io.UserName)).
            ForMember(des => des.Email, opt => opt.MapFrom(io => io.Email)).
-             ForMember(des => des.PersonalNumber, opt => opt.MapFrom(io => io.PersonalNumber))
+           ForMember(des => des.PersonalNumber, opt => opt.MapFrom(io => io.PersonalNumber))
              .ReverseMap();
+
+            CreateMap<TransactionType, TransactionTypeModel>().
+                 ForMember(dest => dest.TransactionName, opt => opt.MapFrom(io => io.TransactionName))
+                 .ReverseMap();
 
         }
     }

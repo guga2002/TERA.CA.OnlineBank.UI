@@ -5,12 +5,17 @@ namespace TERA.Ca.OnlineBank.Domain.Models
     public class UserModel
     {
         [Required]
+        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Name Is not valid")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Name  is not valid")]
         public string Name { get; set; }
         [Required]
+        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Surname Is not valid")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Surname  is not valid")]
         public string Surname { get; set; }
 
         [Required]
-        [StringLength(11)]
+        [StringLength(11, ErrorMessage = "Personal Number mMust be 11 digit", MinimumLength = 11)]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "Only 11 digit ar allowed")]
         public string PersonalNumber { get; set; }
 
         [Required]
@@ -21,5 +26,10 @@ namespace TERA.Ca.OnlineBank.Domain.Models
 
         [Required]
         public string Email  { get; set; }
+
+        public override string ToString()
+        {
+            return $"Name: {Name};Surname:{Surname}; PersonalNumber: {PersonalNumber};UserName:{Username}; Email:{Email}";
+        }
     }
 }

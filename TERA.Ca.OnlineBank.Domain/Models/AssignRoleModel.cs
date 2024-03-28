@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TERA.Ca.OnlineBank.Domain.Models
 {
@@ -12,6 +7,13 @@ namespace TERA.Ca.OnlineBank.Domain.Models
         [Required]
         public string UserID { get; set; }
         [Required]
+        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Name Is not valid")]
+        [StringLength(15, MinimumLength = 2, ErrorMessage = "Role Is not Valid")]
         public string Role { get; set; }
+
+        public override string ToString()
+        {
+            return $"UserID: {UserID} , Role: {Role};";
+        }
     }
 }

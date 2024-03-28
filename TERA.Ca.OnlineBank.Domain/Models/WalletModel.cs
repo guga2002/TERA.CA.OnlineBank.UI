@@ -12,5 +12,10 @@ namespace TERA.Ca.OnlineBank.Domain.Models
         [Required]
         public Guid CurencyId { get; set; }
 
+        public override string ToString()
+        {
+            return $"Amount:{Amount}; UserId: {UserId}; CurencyId:{CurencyId}";
+        }
+
     }
 }
