@@ -84,6 +84,16 @@ namespace TERA.CA.OnlineBank.Core.Repositories
             return true;
         }
 
+        public async Task<bool> ResetPasword(string id, string old, string newpasswo)
+        {
+            if(Context.Users.Any(io=>io.Id==id))
+            {
+                var res = await Context.Users.FirstOrDefaultAsync(io => io.Id == id);
+                await _UserManager.ChangePasswordAsync(res, old, newpasswo);
+                return true;
+            }
+            return false;
+        }
         public async  Task<bool> Delete(User entoty)
         {
             Context.Users.Remove(entoty);

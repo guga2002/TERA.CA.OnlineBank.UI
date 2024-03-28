@@ -8,7 +8,6 @@ namespace TERA.Ca.OnlineBank.Domain.Interfaces
     {
         Task<bool> AddRole(string role);
         Task<bool> AsignToRole(AssignRoleModel model);
-        Task<bool> DeleteRole(string role);
         Task<bool> ResetPassword(ResetPasswordModel model);
         Task<bool> ModifyUser(string PersonalNumber, UserModel NewInfo);
         Task<bool> DeleteUser(Guid Id);

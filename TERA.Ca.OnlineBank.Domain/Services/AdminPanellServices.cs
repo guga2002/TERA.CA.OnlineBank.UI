@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using TERA.Ca.OnlineBank.Domain.Interfaces;
 using TERA.Ca.OnlineBank.Domain.Models;
+using TERA.Ca.OnlineBank.Domain.Validations;
+using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
 
 namespace TERA.Ca.OnlineBank.Domain.Services
@@ -11,59 +13,128 @@ namespace TERA.Ca.OnlineBank.Domain.Services
         {
         }
 
-        public Task<bool> AddRole(string role)
+        public async Task<bool> AddRole(string role)
         {
-            throw new NotImplementedException();
+            if(role == null)
+            {
+                throw new OnlineWalletException(" Roli  ar sheidzleba iyos nali");
+            }
+            var res=await work.UserRepository.AddRole(role);
+            await work.SaveChanges();
+            return res;
         }
 
-        public Task<bool> AsignToRole(AssignRoleModel model)
+        public async Task<bool> AsignToRole(AssignRoleModel model)
         {
-            throw new NotImplementedException();
+            if(model.UserID == null||model.Role is null)
+            {
+                throw new OnlineWalletException("Role or User Id is invalid");
+            }
+            var res = await work.UserRepository.AsignToRole(model.UserID, model.Role);
+            await work.SaveChanges();
+            return res;
         }
 
-        public Task<bool> Create(CurencyModel entity)
+        public async Task<bool> Create(CurencyModel entity)
         {
-            throw new NotImplementedException();
+            if(entity==null)
+            {
+                throw new OnlineWalletException(" it can not be null while adding curency");
+            }
+            var mapped = mapper.Map<Curency>(entity);
+            var res = await work.CurencyRepository.Create(mapped);
+            await work.SaveChanges();
+            return res;
         }
 
-        public Task<bool> Delete(Guid entoty)
+        public async Task<bool> Delete(Guid entoty)//deletes curency
         {
-            throw new NotImplementedException();
+            var curenc = await work.CurencyRepository.GetById(entoty.ToString());
+            if(curenc!=null)
+            {
+                var res=await work.CurencyRepository.Delete(curenc);
+                if(res)
+                {
+                   await work.SaveChanges();
+                    return true;
+                }
+            }
+            return false;
         }
 
-        public Task<bool> DeleteRole(string role)
+
+        public async Task<bool> DeleteUser(Guid Id)
         {
-            throw new NotImplementedException();
+           var user =await work.UserRepository.GetById(Id.ToString());
+            if (user != null)
+            {
+                var res = work.UserRepository.Delete(user);
+                await work.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
-        public Task<bool> DeleteUser(Guid Id)
+        public async Task<IEnumerable<CurencyModel>> GetAll()
         {
-            throw new NotImplementedException();
+            var res = await work.CurencyRepository.GetAll();
+            if(res!=null)
+            {
+                var mapped=mapper.Map<IEnumerable<CurencyModel>>(res);
+                return mapped;
+            }
+            return new List<CurencyModel>();
         }
 
-        public Task<IEnumerable<CurencyModel>> GetAll()
+        public async Task<CurencyModel> GetById(Guid Id)
         {
-            throw new NotImplementedException();
+            var curency = await work.CurencyRepository.GetById(Id.ToString());
+            if ((curency!=null))
+            {
+                var mapped = mapper.Map<CurencyModel>(curency);
+                return mapped;
+            }
+            return new CurencyModel();
         }
 
-        public Task<CurencyModel> GetById(Guid Id)
+        public async Task<bool> ModifyUser(string PersonalNumber, UserModel NewInfo)
         {
-            throw new NotImplementedException();
+            if(PersonalNumber is null&&NewInfo!=null)
+            {
+                throw new OnlineWalletException(" it can not be null");
+            }
+            var mapped = mapper.Map<User>(NewInfo);
+            var res = await work.UserRepository.Update(mapped);
+            if(res)
+            {
+                return true;
+            }
+            return false;
         }
 
-        public Task<bool> ModifyUser(string PersonalNumber, UserModel NewInfo)
+        public async Task<bool> ResetPassword(ResetPasswordModel model)
         {
-            throw new NotImplementedException();
+            if(model.OldPassword is null ||model.NewPassword is null)
+            {
+                throw new OnlineWalletException(" passwords  can be null");
+            }
+            if(!model.NewPassword.Equals(model.OldPassword))
+            {
+                throw new OnlineWalletException("Passwords do not math");
+            }
+            var res=await work.UserRepository.ResetPasword(model.UserId, model.OldPassword, model.NewPassword);
+            return res;
         }
 
-        public Task<bool> ResetPassword(ResetPasswordModel model)
+        public async Task<bool> Update(CurencyModel entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> Update(CurencyModel entity)
-        {
-            throw new NotImplementedException();
+            if(entity==null)
+            {
+                throw new OnlineWalletException("entity is null while  updating");
+            }
+            var mapped = mapper.Map<Curency>(entity);
+            var res=await work.CurencyRepository.Update(mapped);
+            return res;
         }
     }
 }

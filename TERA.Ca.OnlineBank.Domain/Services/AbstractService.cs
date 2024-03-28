@@ -10,8 +10,8 @@ namespace TERA.Ca.OnlineBank.Domain.Services
 {
     public  abstract class AbstractService
     {
-        private readonly IUniteOfWork work;
-        private readonly IMapper mapper;
+        protected readonly IUniteOfWork work;
+        protected readonly IMapper mapper;
 
         protected AbstractService(IUniteOfWork work,IMapper map)
         {
