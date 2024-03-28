@@ -44,33 +44,6 @@ namespace TERA.CA.OnlineBank.UI.Controllers
 
         }
 
-        [HttpDelete]
-        [Route("Role/{roleName}")]
-        public async Task<IActionResult> DeleteRole(string roleName)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    logger.LogError("Model State is not valid");
-                    return BadRequest();
-                }
-                var result = await service.DeleteRole(roleName);
-                if (!result)
-                {
-                    return NotFound();
-                }
-                logger.LogInformation("Successfully  add role to DB");
-                return Ok(result);
-            }
-            catch (Exception exp)
-            {
-                logger.LogCritical(exp.Message);
-                return BadRequest();
-            }
-
-        }
-
         [HttpPost]
         [Route("Role/Assign")]
         public async Task<IActionResult> AsignToRole(AssignRoleModel model)
@@ -264,6 +237,72 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                 return BadRequest();
             }
 
+        }
+
+        [HttpPost]
+        [Route("TransactionType")]
+        public async Task<IActionResult> CreateTransactionType(TransactionTypeModel entity)
+        {
+            try
+            {
+                var res = await service.CreateTransactionType(entity);
+                if (!res)
+                {
+                    logger.LogCritical("No TransactionType Modified");
+                    return BadRequest();
+                }
+                logger.LogInformation("Transactiontype Modified");
+                return Ok(res);
+            }
+            catch (Exception exp)
+            {
+                logger.LogError(exp.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete]
+        [Route("TransactionType")]
+        public async Task<IActionResult> DeleteTransactionType(TransactionTypeModel entoty)
+        {
+            try
+            {
+                var res = await service.DeleteTransactionType(entoty);
+                if (!res)
+                {
+                    logger.LogCritical("No TransactionType Deleted");
+                    return BadRequest();
+                }
+                logger.LogInformation("Transactiontype Deleted");
+                return Ok(res);
+            }
+            catch (Exception exp)
+            {
+                logger.LogError(exp.Message);
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        [Route("TransactionType/{Id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetByIdTransactionType(string Id)
+        {
+            try
+            {
+                var res = await service.GetByIdTransactionType(Id);
+                if (res == null)
+                {
+                    logger.LogInformation("No records exist");
+                    return NotFound();
+                }
+                return Ok(res);
+            }
+            catch (Exception exp)
+            {
+                logger.LogError(exp.Message);
+                return BadRequest();
+            }
         }
     }
 }

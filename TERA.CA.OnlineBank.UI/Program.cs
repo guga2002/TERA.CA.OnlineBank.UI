@@ -55,6 +55,7 @@ builder.Services.AddScoped<ICurencyRepository, CurencyRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<ITransactionType, TransactionTypeRepository>();
 
 builder.Services.AddScoped<IAdminPanell, AdminPanellServices>();
 builder.Services.AddScoped<IOnlineBankServices, OnlineBankServices>();
