@@ -13,6 +13,9 @@ namespace TERA.CA.OnlineBank.Core.Entities
         [Column("Course_In_Gel")]
         public decimal Equvalent { get; set; }
 
+        [Column("Date_Of_Valute")]
+        public DateTime Date { get; set; } = DateTime.Now;
+
         public virtual IEnumerable<Wallet> wallets { get; set; }
     }
 }

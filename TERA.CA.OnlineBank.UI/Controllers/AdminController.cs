@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TERA.Ca.OnlineBank.Domain.Interfaces;
 using TERA.Ca.OnlineBank.Domain.Models;
 
@@ -16,6 +17,14 @@ namespace TERA.CA.OnlineBank.UI.Controllers
         {
             this.service = Serv;
             this.logger = Logger;
+        }
+
+        [HttpGet("JUSTTESTING")]
+        [AllowAnonymous]
+        public IActionResult testing()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return Ok(userId);
         }
         [HttpPost]
         [Route("Role/{roleName}")]
@@ -105,7 +114,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             try
             {
                 var res = await service.GetAll();
-                if (res!=null)
+                if (res==null)
                 {
                     logger.LogCritical("No Curency Deleted to db");
                     return BadRequest();
@@ -172,8 +181,8 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             }
         }
         [HttpDelete]
-        [Route("Currency")]
-        public async Task<IActionResult> DeleteCurency(Guid entoty)
+        [Route("Currency/{Id}")]
+        public async Task<IActionResult> DeleteCurency(Guid Id)
         {
             try
             {
@@ -182,7 +191,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                     logger.LogError("MoDel State Is not Valid");
                     return BadRequest();
                 }
-                var res = await service.Delete(entoty);
+                var res = await service.Delete(Id);
                 if (!res)
                 {
                     logger.LogCritical("No Curency Deleted to db");
@@ -204,7 +213,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             try
             {
                 var res = await service.ResetPassword(entity);
-                if (!res)
+                if (res==false)
                 {
                     logger.LogCritical("No password Reseted");
                     return BadRequest();

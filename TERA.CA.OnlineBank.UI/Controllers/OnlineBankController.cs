@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TERA.Ca.OnlineBank.Domain.Interfaces;
 using TERA.Ca.OnlineBank.Domain.Models;
 
@@ -7,7 +8,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "POWEREDUSER")]
+    [Authorize(Roles = "POWEREDUSER,ADMIN")]
     public class OnlineBankController : ControllerBase
     {
         private readonly IOnlineBankServices ser;
@@ -24,10 +25,12 @@ namespace TERA.CA.OnlineBank.UI.Controllers
         {
             try
             {
-                if(!ModelState.IsValid)
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!ModelState.IsValid || userId == null)
                 {
                     return BadRequest();
                 }
+                mod.SenderId = Guid.Parse(userId);
                 var res = await ser.TransferMoney(mod);
                 if(!res)
                 {
@@ -42,16 +45,17 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             }
         }
         [HttpGet]
-        [Route("Balance/{Userid}")]
-        public async Task<IActionResult> CheckBalance(Guid Userid)
+        [Route("Balance")]
+        public async Task<IActionResult> CheckBalance()
         {
             try
             {
-                if (!ModelState.IsValid)
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!ModelState.IsValid||userId==null)
                 {
                     return BadRequest();
                 }
-                var res = await ser.CheckBalance(Userid);
+                var res = await ser.CheckBalance(Guid.Parse(userId));
                 if(res==null)
                 {
                     return NotFound();
@@ -65,17 +69,18 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             }
         }
         [HttpGet]
-        [Route("Profile/{Userid}")]//sxvisi profilis naxva
-        [AllowAnonymous]
-        public async Task<IActionResult> CheckProfile(Guid Userid)
+        [Route("Profile")]
+        public async Task<IActionResult> CheckProfile()
         {
             try
             {
-                if (!ModelState.IsValid)
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (!ModelState.IsValid||userId==null)
                 {
                     return BadRequest();
                 }
-                var res = await ser.CheckProfile(Userid);
+               
+                var res = await ser.CheckProfile(Guid.Parse(userId));
                 if (res == null)
                 {
                     return NotFound();

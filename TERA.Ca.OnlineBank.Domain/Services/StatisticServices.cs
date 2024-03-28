@@ -17,11 +17,14 @@ namespace TERA.Ca.OnlineBank.Domain.Services
         public async Task<IEnumerable<string>> GetMostPopulatTransactionsTypes(int count)
         {
             var tran = await work.TransactionType.GetAll();
-            var res= tran.OrderByDescending(io => io.Transactions.Count());
-            var populars = res.Take(count).Select(io => io.TransactionName);
-            if (populars != null)
+            if (tran.Count()>1)
             {
-                return populars;
+                var res = tran.OrderByDescending(io => io.Transactions.Count());
+                var populars = res.Take(count).Select(io => io.TransactionName);
+                if (populars != null)
+                {
+                    return populars;
+                }
             }
             return new List<string>();
         }

@@ -5,8 +5,7 @@ namespace TERA.Ca.OnlineBank.Domain.Models
     public class CurencyModel
     {
         [Required]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Name Is not valid")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "Currency name is not valid")]
+        [StringLength(50, MinimumLength = 1, ErrorMessage = "Currency name is not valid")]
         public string Name { get; set; }
 
         [Required]

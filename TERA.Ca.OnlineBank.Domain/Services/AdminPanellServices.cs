@@ -151,9 +151,9 @@ namespace TERA.Ca.OnlineBank.Domain.Services
             {
                 throw new OnlineWalletException(" passwords  can be null");
             }
-            if(!model.NewPassword.Equals(model.OldPassword))
+            if(model.NewPassword.Equals(model.OldPassword))
             {
-                throw new OnlineWalletException("Passwords do not math");
+                throw new OnlineWalletException("Passwords must be  different ");
             }
             var res=await work.UserRepository.ResetPasword(model.UserId, model.OldPassword, model.NewPassword);
             return res;

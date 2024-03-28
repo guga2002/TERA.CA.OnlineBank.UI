@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SharpCompress.Common;
 using TERA.Ca.OnlineBank.Domain.Interfaces;
 using TERA.Ca.OnlineBank.Domain.Models;
 
@@ -9,7 +7,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "POWEREDUSER")]
+    [Authorize(Roles = "POWEREDUSER,ADMIN")]
     public class WalletController : ControllerBase
     {
 
@@ -95,6 +93,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
 
         [HttpGet]
         [Route("/{WalletId}")]
+        [Authorize(Roles = "ADMIN")]
         public async Task<IActionResult> GetByIdWithDetails(Guid WalletId)
         {
             try
@@ -118,6 +117,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles ="ADMIN")]
         public async Task<IActionResult> GetAllWithDetails()
         {
             try

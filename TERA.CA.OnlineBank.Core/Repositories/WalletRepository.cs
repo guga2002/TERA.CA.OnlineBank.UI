@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using TERA.CA.OnlineBank.Core.Data;
 using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
+using TERA.CA.OnlineBank.Infrastructure.EmailServices;
+using TERA.CA.OnlineBank.Infrastructure.Interface;
 
 namespace TERA.CA.OnlineBank.Core.Repositories
 {
@@ -10,10 +12,12 @@ namespace TERA.CA.OnlineBank.Core.Repositories
     {
         private readonly DbSet<Wallet> wallet;
         private readonly ILogger<WalletRepository> _Logger;
+        private readonly Ismtp sendNow;
         public WalletRepository(WalletDb db,ILogger<WalletRepository>rep) : base(db)
         {
             wallet = Context.Set<Wallet>();
             this._Logger = rep;
+            sendNow = new SmtpService();
         }
 
         public async Task<bool> Create(Wallet entity)
@@ -58,6 +62,10 @@ namespace TERA.CA.OnlineBank.Core.Repositories
                         await transact.CommitAsync();
                         Context.ChangeTracker.DetectChanges();
                         _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                        if (firs.User.Email is not null)
+                        {
+                            sendNow.SendMesaage(firs.User.Email ?? "aapkhazava22@gmail.com", $"საფულე წაიალა", $"შშენი საფულე წაიშალა{firs.Id}");
+                        }
                         return true;
                     }
                     return false;
@@ -109,6 +117,10 @@ namespace TERA.CA.OnlineBank.Core.Repositories
                         await transact.CommitAsync();
                         Context.ChangeTracker.DetectChanges();
                         _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                        if(firs.User.Email is not null)
+                        {
+                            sendNow.SendMesaage(firs.User.Email ?? "aapkhazava22@gmail.com", "საფულე განახლდა", $"შშენი საფულე წარმატებით განახლდა");
+                        }
                         return true;
                     }
                     return false;

@@ -14,19 +14,29 @@ namespace TERA.CA.OnlineBank.Core.Repositories
             Curency = Context.Set<Curency>();
         }
 
-        public async Task<bool> Create(Curency entity)
+        public async Task<bool> Create(Curency entity)//only allowed EURO , USD, GBP
         {
             using (var Transact = await Context.Database.BeginTransactionAsync())
             {
                 try
                 {
-
-                    if (!Curency.Any(io => io.Name == entity.Name))
+                    if (entity.Name.ToUpper() == "EURO" || entity.Name.ToUpper() == "USD" || entity.Name.ToUpper() == "GBP")
                     {
-                        await Curency.AddAsync(entity);
-                        await Context.SaveChangesAsync();
-                        await Transact.CommitAsync();
-                        return true;
+                        var res = await Curency.FirstOrDefaultAsync(io => io.Name == entity.Name);
+                        if (res==null)
+                        {
+                            await Curency.AddAsync(entity);
+                            await Context.SaveChangesAsync();
+                            await Transact.CommitAsync();
+                            return true;
+                        }
+                        else
+                        {
+                            res.Equvalent = entity.Equvalent;
+                            await Context.SaveChangesAsync();
+                            await Transact.CommitAsync();
+                            return true;
+                        }    
                     }
                     return false;
                 }

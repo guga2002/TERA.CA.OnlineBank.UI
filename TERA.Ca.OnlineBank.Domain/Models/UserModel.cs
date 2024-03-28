@@ -5,11 +5,9 @@ namespace TERA.Ca.OnlineBank.Domain.Models
     public class UserModel
     {
         [Required]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Name Is not valid")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Name  is not valid")]
         public string Name { get; set; }
         [Required]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Surname Is not valid")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Surname  is not valid")]
         public string Surname { get; set; }
 

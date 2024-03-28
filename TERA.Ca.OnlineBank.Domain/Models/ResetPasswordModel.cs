@@ -8,12 +8,10 @@ namespace TERA.Ca.OnlineBank.Domain.Models
         public string UserId { get; set; }
 
         [Required]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Password Is not valid")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Password  is not valid")]
         public string NewPassword { get; set; }
 
         [Required]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "Password Is not valid")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Password  is not valid")]
         public string OldPassword { get; set; }
 

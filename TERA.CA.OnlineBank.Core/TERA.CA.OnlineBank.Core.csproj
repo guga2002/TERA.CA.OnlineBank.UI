@@ -22,4 +22,8 @@
     <PackageReference Include="MongoDB.Driver" Version="2.24.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TERA.CA.OnlineBank.Infrastructure\TERA.CA.OnlineBank.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

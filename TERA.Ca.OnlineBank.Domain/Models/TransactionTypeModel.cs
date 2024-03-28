@@ -6,7 +6,6 @@ namespace TERA.Ca.OnlineBank.Domain.Models
     {
 
         [Required]
-        [RegularExpression(@"^[a-zA-Z\s]*$", ErrorMessage = "TransactionName Is not valid")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "TransactionName  is not valid")]
         public string TransactionName { get; set; }
 

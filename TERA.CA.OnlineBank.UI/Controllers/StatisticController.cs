@@ -6,7 +6,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "ADMIN,POWEREDUSER")]
+    [Authorize(Roles = "ADMIN")]
     public class StatisticController : ControllerBase
     {
         private readonly IStatisticServices ser;
@@ -19,31 +19,31 @@ namespace TERA.CA.OnlineBank.UI.Controllers
         }
 
         [HttpGet]
-        [HttpGet("/{count}")]
+        [Route("Popular/{count}")]
         public async Task<IActionResult> GetMostPopulatTransactionsTypes(int count)
         {
             try
             {
                 if(!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return NotFound();
                 }
                 var res=await ser.GetMostPopulatTransactionsTypes(count);
                 if(res.Count()==0)
                 {
                     Logger.LogCritical("No Transactions exist");
-                    return NotFound();
+                    return NotFound("No Transactions exist");
                 }
                 return Ok(res);
             }
             catch (Exception exp)
             {
-                Logger.LogCritical(exp.Message);
-                return BadRequest();
+                Logger.LogCritical(exp.StackTrace);
+                return BadRequest(exp.Message);
             }
         }
         [HttpGet]
-        [HttpGet("Type/{type}")]
+        [Route("Popular/Transaction{type}")]
         public async Task<IActionResult> GetTransactionsByTransactionType(string type)
         {
             try
@@ -51,13 +51,13 @@ namespace TERA.CA.OnlineBank.UI.Controllers
 
                 if (!ModelState.IsValid || string.IsNullOrEmpty(type))
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 var res = await ser.GetTransactionsByTransactionType(type);
                 if (res.Count() == 0)
                 {
                     Logger.LogInformation($"CHanaweri ar moidzebba  tranzaqciis tippshi{type}");
-                    return NotFound();
+                    return NotFound("No data exist");
                 }
                 return Ok(res);
 
@@ -65,11 +65,11 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 Logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
         }
         [HttpGet]
-        [Route("Period/{start}/{end}")]
+        [Route("Popular/{start}/{end}")]
         public async Task<IActionResult> GetTransactonsByPeriod(DateTime start, DateTime end)
         {
             try
@@ -77,13 +77,13 @@ namespace TERA.CA.OnlineBank.UI.Controllers
 
                 if (!ModelState.IsValid || start>=end)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 var res = await ser.GetTransactonsByPeriod(start,end);
                 if (res.Count() == 0)
                 {
                     Logger.LogInformation($"CHanaweri ar moidzebba  tranzaqcibi am prsiodshi {start}- {end}");
-                    return NotFound();
+                    return NotFound("No data exist");
                 }
                 return Ok(res);
 
@@ -91,7 +91,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             catch (Exception exp)
             {
                 Logger.LogError(exp.Message);
-                return BadRequest();
+                return BadRequest(exp.Message);
             }
 
         }

@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TERA.CA.OnlineBank.Core\TERA.CA.OnlineBank.Core.csproj" />
     <ProjectReference Include="..\TERA.Ca.OnlineBank.Domain\TERA.Ca.OnlineBank.Domain.csproj" />
+    <ProjectReference Include="..\TERA.CA.OnlineBank.Infrastructure\TERA.CA.OnlineBank.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

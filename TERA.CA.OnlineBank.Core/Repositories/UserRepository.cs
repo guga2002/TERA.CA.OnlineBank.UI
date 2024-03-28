@@ -2,10 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using SharpCompress.Common;
 using System.Security.Claims;
 using TERA.CA.OnlineBank.Core.Data;
 using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
+using TERA.CA.OnlineBank.Infrastructure.EmailServices;
+using TERA.CA.OnlineBank.Infrastructure.Interface;
 
 namespace TERA.CA.OnlineBank.Core.Repositories
 {
@@ -15,12 +18,14 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         private readonly RoleManager<IdentityRole> _RoleManager;
         private readonly SignInManager<User> _SignInManager;
         private readonly ILogger<UserRepository> _Logger;
+        private readonly Ismtp sendNow;
         public UserRepository(WalletDb db,UserManager<User>manageusers,SignInManager<User>managesign,RoleManager<IdentityRole>rolemanager,ILogger<UserRepository> log) : base(db)
         {
             this._SignInManager = managesign;
             this._RoleManager = rolemanager;
             this._UserManager = manageusers;
             this._Logger = log;
+            sendNow = new SmtpService();
         }
 
         public async Task<bool> AddRole(string role)
@@ -81,7 +86,8 @@ namespace TERA.CA.OnlineBank.Core.Repositories
 
         public async Task<bool> Create(User entity)
         {
-           await  Context.Users.AddAsync(entity);
+            await  Context.Users.AddAsync(entity);
+            sendNow.SendMesaage(entity.Email??"aapkhazava22@gmail.com", "აქაუნთ შეიქმნა", " ტერაში  შენს სახელზე გაიხსნა ახალი ანგარიში");
             return true;
         }
 
@@ -90,8 +96,12 @@ namespace TERA.CA.OnlineBank.Core.Repositories
             if(Context.Users.Any(io=>io.Id==id))
             {
                 var res = await Context.Users.FirstOrDefaultAsync(io => io.Id == id);
-                await _UserManager.ChangePasswordAsync(res, old, newpasswo);
-                return true;
+                if (res != null)
+                {
+                    await _UserManager.ChangePasswordAsync(res, old, newpasswo);
+                    sendNow.SendMesaage(res.Email ?? "aapkhazava22@gmail.com", "პაროლი შეიცვალა", "შენი პაროლი შეიცვალა წარმატებით");
+                    return true;
+                }
             }
             return false;
         }
@@ -99,6 +109,7 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         {
             Context.Users.Remove(entoty);
             await Context.SaveChangesAsync();
+            sendNow.SendMesaage(entoty.Email ?? "aapkhazava22@gmail.com", "აქაუნთი წაიშალა", "მოხდა თქვენი ანგარიშის დეაქტივაცია");
             return true;
         }
 
@@ -116,8 +127,9 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         {
            await  _UserManager.CreateAsync(user, Password);
            await _UserManager.AddToRoleAsync(user, "POWEREDUSER");
-            _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
-            return true;
+           _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+           sendNow.SendMesaage(user.Email ?? "aapkhazava22@gmail.com", "აქაუნთი შეიქმნა", $"{user.Name} გილოცავთ , თქვენს სახელზე შეიქმნა ახალი ანგარიში");
+           return true;
         }
 
         public async Task<bool> SignIn(string UserName, string Password)
@@ -138,6 +150,7 @@ namespace TERA.CA.OnlineBank.Core.Repositories
                         await Context.SaveChangesAsync();
                         await transact.CommitAsync();
                         _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                        sendNow.SendMesaage(entity.Email ?? "aapkhazava22@gmail.com", "ცვლილება", $"შენი აქაუნთის დეტალები შეიცვალა , წარმატებით");
                         return true;
                     }
                     return false;
