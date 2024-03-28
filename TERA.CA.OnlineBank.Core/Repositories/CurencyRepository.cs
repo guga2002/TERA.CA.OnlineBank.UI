@@ -26,7 +26,7 @@ namespace TERA.CA.OnlineBank.Core.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Curency> GetById(Guid Id)
+        public Task<Curency> GetById(string Id)
         {
             throw new NotImplementedException();
         }

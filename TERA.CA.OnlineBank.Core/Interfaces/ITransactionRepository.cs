@@ -7,11 +7,11 @@ using System.Transactions;
 
 namespace TERA.CA.OnlineBank.Core.Interfaces
 {
-    public interface ITransactionRepository:ICrudRepository<Transaction>
+    public interface ITransactionRepository:ICrudRepository<TERA.CA.OnlineBank.Core.Entities.Transaction>
     {
-        Task<Transaction> GetByIdWithDetails(Guid Id);
+        Task<TERA.CA.OnlineBank.Core.Entities.Transaction> GetByIdWithDetails(Guid Id);
 
-        Task<IEnumerable<Transaction>> GetAllWithDetails();
+        Task<IEnumerable<TERA.CA.OnlineBank.Core.Entities.Transaction>> GetAllWithDetails();
 
     }
 }

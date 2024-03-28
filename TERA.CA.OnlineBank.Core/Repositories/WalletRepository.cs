@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SharpCompress.Common;
-using System.Security.AccessControl;
+using Microsoft.Extensions.Logging;
 using TERA.CA.OnlineBank.Core.Data;
 using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
@@ -10,9 +9,11 @@ namespace TERA.CA.OnlineBank.Core.Repositories
     public class WalletRepository : AbstractRepository, IWalletRepository
     {
         private readonly DbSet<Wallet> wallet;
-        public WalletRepository(WalletDb db) : base(db)
+        private readonly ILogger<WalletRepository> _Logger;
+        public WalletRepository(WalletDb db,ILogger<WalletRepository>rep) : base(db)
         {
             wallet = Context.Set<Wallet>();
+            this._Logger = rep;
         }
 
         public async Task<bool> Create(Wallet entity)
@@ -24,6 +25,8 @@ namespace TERA.CA.OnlineBank.Core.Repositories
                     await wallet.AddAsync(entity);
                     await Context.SaveChangesAsync();
                     await transact.CommitAsync();
+                    Context.ChangeTracker.DetectChanges();
+                    _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
                     return true;
                 }
                 await transact.RollbackAsync();
@@ -41,6 +44,8 @@ namespace TERA.CA.OnlineBank.Core.Repositories
                     wallet.Remove(firs);
                     await Context.SaveChangesAsync();
                     await transact.CommitAsync();
+                    Context.ChangeTracker.DetectChanges();
+                    _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
                     return true;
                 }
                 await transact.RollbackAsync();
@@ -59,7 +64,7 @@ namespace TERA.CA.OnlineBank.Core.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Wallet> GetById(Guid Id)
+        public async Task<Wallet> GetById(string Id)
         {
             return await wallet.FindAsync(Id)??new Wallet();
         }
@@ -82,6 +87,8 @@ namespace TERA.CA.OnlineBank.Core.Repositories
                     wallet.Update(firs);
                     await Context.SaveChangesAsync();
                     await transact.CommitAsync();
+                    Context.ChangeTracker.DetectChanges();
+                    _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
                     return true;
                 }
                 await transact.RollbackAsync();

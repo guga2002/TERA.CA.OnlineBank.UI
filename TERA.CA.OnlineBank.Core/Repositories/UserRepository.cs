@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using TERA.CA.OnlineBank.Core.Data;
 using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
@@ -11,56 +13,103 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         private readonly UserManager<User> _UserManager;
         private readonly RoleManager<IdentityRole> _RoleManager;
         private readonly SignInManager<User> _SignInManager;
-        public UserRepository(WalletDb db,UserManager<User>manageusers,SignInManager<User>managesign,RoleManager<IdentityRole>rolemanager) : base(db)
+        private readonly ILogger<UserRepository> _Logger;
+        public UserRepository(WalletDb db,UserManager<User>manageusers,SignInManager<User>managesign,RoleManager<IdentityRole>rolemanager,ILogger<UserRepository> log) : base(db)
         {
             this._SignInManager = managesign;
             this._RoleManager = rolemanager;
             this._UserManager = manageusers;
+            this._Logger = log;
         }
 
-        public Task<bool> AddRole(string role)
+        public async Task<bool> AddRole(string role)
         {
-            throw new NotImplementedException();
+            using (var transact = await Context.Database.BeginTransactionAsync())
+            {
+                var res = await Context.Roles.AnyAsync(io => io.Name == role.ToUpper());
+                if (!res)
+                {
+                    await _RoleManager.CreateAsync(new IdentityRole(role));
+                    await transact.CommitAsync();
+                    _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                    return true;
+                }
+               await transact.RollbackAsync();
+                return false;
+            }
         }
 
-        public Task<bool> AsignToRole(string Id, string Role)
+        public async  Task<bool> AsignToRole(string Id, string Role)
         {
-            throw new NotImplementedException();
+            using (var transact = await Context.Database.BeginTransactionAsync())
+            {
+                var user = await Context.Users.Where(io => io.Id == Id).FirstOrDefaultAsync();
+                if (user != null)
+                {
+                    if (await _RoleManager.RoleExistsAsync(Role))
+                    {
+                        await _UserManager.AddToRoleAsync(user, Role);
+                        await transact.CommitAsync();
+                        _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                        return true;
+                    }
+                }
+                await transact.RollbackAsync();
+                return false;
+            }
         }
 
-        public Task<bool> Create(User entity)
+        public async Task<bool> Create(User entity)
         {
-            throw new NotImplementedException();
+           await  Context.Users.AddAsync(entity);
+            return true;
         }
 
-        public Task<bool> Delete(User entoty)
+        public async  Task<bool> Delete(User entoty)
         {
-            throw new NotImplementedException();
+            Context.Users.Remove(entoty);
+            await Context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<IEnumerable<User>> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            throw new NotImplementedException();
+            return await  Context.Users.ToListAsync();
         }
 
-        public Task<User> GetById(Guid Id)
+        public async Task<User> GetById(string Id)
         {
-            throw new NotImplementedException();
+            return await  Context.Users.FirstOrDefaultAsync(io => io.Id == Id)??new User();
         }
 
-        public Task<bool> Register(User user, string Password)
+        public async Task<bool> Register(User user, string Password)
         {
-            throw new NotImplementedException();
+           await  _UserManager.CreateAsync(user, Password);
+            _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+            return true;
         }
 
-        public Task<bool> SignIn(string UserName, string Password)
+        public async Task<bool> SignIn(string UserName, string Password)
         {
-            throw new NotImplementedException();
+            await _SignInManager.PasswordSignInAsync(UserName, Password, false, false);
+            return true;
         }
 
-        public Task<bool> Update(User entity)
+        public async Task<bool> Update(User entity)
         {
-            throw new NotImplementedException();
+            using (var transact = await Context.Database.BeginTransactionAsync())
+            {
+                if (Context.Users.Any(io => io.PersonalNumber == entity.PersonalNumber))
+                {
+                    Context.Users.Update(entity);
+                    await Context.SaveChangesAsync();
+                    await transact.RollbackAsync();
+                    return true;
+                }
+                await transact.CommitAsync();
+                _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                return false;
+            }
         }
     }
 }
