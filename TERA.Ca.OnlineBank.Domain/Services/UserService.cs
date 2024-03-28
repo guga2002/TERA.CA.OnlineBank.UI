@@ -21,7 +21,7 @@ namespace TERA.Ca.OnlineBank.Domain.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(UserModel entoty)
+        public Task<bool> Delete(Guid entoty)
         {
             throw new NotImplementedException();
         }
@@ -36,12 +36,12 @@ namespace TERA.Ca.OnlineBank.Domain.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> Register(UserModel user, string Password)
+        public Task<bool> Register(UserModel user)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> SignIn(string UserName, string Password)
+        public Task<bool> SignIn(SignInModel model)
         {
             throw new NotImplementedException();
         }

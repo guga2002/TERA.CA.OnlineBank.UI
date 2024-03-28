@@ -12,37 +12,17 @@ namespace TERA.Ca.OnlineBank.Domain.Services
         {
         }
 
-        public Task<bool> Create(Transaction entity)
+        public Task<BalanceModel> CheckBalance(Guid Userid)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(Transaction entoty)
+        public Task<UserModel> CheckProfile(Guid Userid)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Transaction>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<CurencyModel>> GetAllValute()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Transaction> GetById(Guid Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<CurencyModel> GetValuteById(Guid Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> Update(Transaction entity)
+        public Task<bool> TransferMoney(TransactionModel mod)
         {
             throw new NotImplementedException();
         }

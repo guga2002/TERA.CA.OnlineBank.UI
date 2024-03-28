@@ -10,7 +10,7 @@ namespace TERA.Ca.OnlineBank.Domain.Interfaces
     {
         Task<bool> Create(T entity);
         Task<bool> Update(T entity);
-        Task<bool> Delete(T entoty);
+        Task<bool> Delete(Guid Id);
         Task<T> GetById(Guid Id);
         Task<IEnumerable<T>> GetAll();
     }

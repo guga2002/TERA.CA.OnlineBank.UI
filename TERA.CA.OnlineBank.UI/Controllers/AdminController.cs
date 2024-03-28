@@ -18,23 +18,50 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             this.logger = Logger;
         }
         [HttpPost]
-        [Route("Role/{role}")]
-        public async  Task<IActionResult> AddRole(string role)
+        [Route("Role/{roleName}")]
+        public async  Task<IActionResult> AddRole(string roleName)
         {
             try
             {
-                if (!ModelState.IsValid || string.IsNullOrEmpty(role))
+                if (!ModelState.IsValid || string.IsNullOrEmpty(roleName))
                 {
                     logger.LogError("Name Is null There");
                     return BadRequest();
                 }
-                var result = await service.AddRole(role);
+                var result = await service.AddRole(roleName);
                 if(!result)
                 {
                     return NotFound();
                 }
                 logger.LogInformation("Successfully  add role to DB");
                 return Ok(result); 
+            }
+            catch (Exception exp)
+            {
+                logger.LogCritical(exp.Message);
+                return BadRequest();
+            }
+
+        }
+
+        [HttpDelete]
+        [Route("Role/{roleName}")]
+        public async Task<IActionResult> DeleteRole(string roleName)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    logger.LogError("Model State is not valid");
+                    return BadRequest();
+                }
+                var result = await service.DeleteRole(roleName);
+                if (!result)
+                {
+                    return NotFound();
+                }
+                logger.LogInformation("Successfully  add role to DB");
+                return Ok(result);
             }
             catch (Exception exp)
             {
@@ -81,7 +108,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                     logger.LogError("MoDel State Is not Valid");
                     return BadRequest();
                 }
-                var res = await service.InsertCurency(entity);
+                var res = await service.Create(entity);
                 if (!res)
                 {
                     logger.LogCritical("No Curency inserted to db");
@@ -97,6 +124,52 @@ namespace TERA.CA.OnlineBank.UI.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("Currency")]
+        public async Task<IActionResult> GellAllCurency()
+        {
+            try
+            {
+                var res = await service.GetAll();
+                if (res!=null)
+                {
+                    logger.LogCritical("No Curency Deleted to db");
+                    return BadRequest();
+                }
+                logger.LogInformation("Successfully Deleted!");
+                return Ok(res);
+            }
+            catch (Exception exp)
+            {
+                logger.LogError(exp.Message);
+                return BadRequest();
+            }
+
+        }
+
+        [HttpGet]
+        [Route("Currency/{Id}")]
+        public async Task<IActionResult> GetAllById(Guid Id)
+        {
+            try
+            {
+                var res = await service.GetById(Id);
+                if (res != null)
+                {
+                    logger.LogCritical("No Curency Deleted to db");
+                    return BadRequest();
+                }
+                logger.LogInformation("Successfully Deleted!");
+                return Ok(res);
+            }
+            catch (Exception exp)
+            {
+                logger.LogError(exp.Message);
+                return BadRequest();
+            }
+
+        }
+
         [HttpPut]
         [Route("Currency")]
         public async Task<IActionResult> UpdateCurency(CurencyModel entity)
@@ -108,7 +181,7 @@ namespace TERA.CA.OnlineBank.UI.Controllers
                     logger.LogError("MoDel State Is not Valid");
                     return BadRequest();
                 }
-                var res = await service.UpdateCurency(entity);
+                var res = await service.Update(entity);
                 if (!res)
                 {
                     logger.LogCritical("No Curency Updated to db");
@@ -125,22 +198,64 @@ namespace TERA.CA.OnlineBank.UI.Controllers
         }
         [HttpDelete]
         [Route("Currency")]
-        public async Task<IActionResult> DeleteCurency(CurencyModel entoty)
+        public async Task<IActionResult> DeleteCurency(Guid entoty)
         {
             try
             {
-                if (!ModelState.IsValid || entoty.Name is null)
+                if (!ModelState.IsValid )
                 {
                     logger.LogError("MoDel State Is not Valid");
                     return BadRequest();
                 }
-                var res = await service.DeleteCurency(entoty);
+                var res = await service.Delete(entoty);
                 if (!res)
                 {
                     logger.LogCritical("No Curency Deleted to db");
                     return BadRequest();
                 }
                 logger.LogInformation("Successfully Deleted!");
+                return Ok(res);
+            }
+            catch (Exception exp)
+            {
+                logger.LogError(exp.Message);
+                return BadRequest();
+            }
+        }
+        [HttpPatch]
+        [Route("User")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel entity)
+        {
+            try
+            {
+                var res = await service.ResetPassword(entity);
+                if (!res)
+                {
+                    logger.LogCritical("No password Reseted");
+                    return BadRequest();
+                }
+                logger.LogInformation("Successfully Reseted!");
+                return Ok(res);
+            }
+            catch (Exception exp)
+            {
+                logger.LogError(exp.Message);
+                return BadRequest();
+            }
+        }
+        [HttpPut]
+        [Route("User/{PersonalNumber}")]
+        public async Task<IActionResult> updateUserData(string PersonalNumber,UserModel entity)
+        {
+            try
+            {
+                var res = await service.ModifyUser(PersonalNumber,entity);
+                if (!res)
+                {
+                    logger.LogCritical("No user Modified");
+                    return BadRequest();
+                }
+                logger.LogInformation("User Modified");
                 return Ok(res);
             }
             catch (Exception exp)

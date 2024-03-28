@@ -8,9 +8,11 @@ using TERA.Ca.OnlineBank.Domain.Models;
 
 namespace TERA.Ca.OnlineBank.Domain.Interfaces
 {
-    public interface IOnlineBankServices:ICrudService<Transaction>
+    public interface IOnlineBankServices
     {
-        Task<CurencyModel> GetValuteById(Guid Id);
-        Task<IEnumerable<CurencyModel>> GetAllValute();
+        Task<bool> TransferMoney(TransactionModel mod);
+        Task<BalanceModel> CheckBalance(Guid Userid);
+        Task<UserModel>CheckProfile(Guid Userid);
+
     }
 }

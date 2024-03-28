@@ -16,7 +16,7 @@ namespace TERA.Ca.OnlineBank.Domain.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(WalletModel entoty)
+        public Task<bool> Delete(Guid entoty)
         {
             throw new NotImplementedException();
         }
