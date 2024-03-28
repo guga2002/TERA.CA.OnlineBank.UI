@@ -26,16 +26,26 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         {
             using (var transact = await Context.Database.BeginTransactionAsync())
             {
-                var res = await Context.Roles.AnyAsync(io => io.Name == role.ToUpper());
-                if (!res)
+                try
                 {
-                    await _RoleManager.CreateAsync(new IdentityRole(role));
-                    await transact.CommitAsync();
-                    _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
-                    return true;
+
+
+                    var res = await Context.Roles.AnyAsync(io => io.Name == role.ToUpper());
+                    if (!res)
+                    {
+                        await _RoleManager.CreateAsync(new IdentityRole(role));
+                        await transact.CommitAsync();
+                        _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                        return true;
+                    }
+                    return false;
                 }
-               await transact.RollbackAsync();
-                return false;
+                catch (Exception exp )
+                {
+                    _Logger.LogCritical(exp.Message);
+                    await transact.RollbackAsync();
+                    throw;
+                }
             }
         }
 
@@ -43,19 +53,28 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         {
             using (var transact = await Context.Database.BeginTransactionAsync())
             {
-                var user = await Context.Users.Where(io => io.Id == Id).FirstOrDefaultAsync();
-                if (user != null)
+                try
                 {
-                    if (await _RoleManager.RoleExistsAsync(Role))
+
+                    var user = await Context.Users.Where(io => io.Id == Id).FirstOrDefaultAsync();
+                    if (user != null)
                     {
-                        await _UserManager.AddToRoleAsync(user, Role);
-                        await transact.CommitAsync();
-                        _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
-                        return true;
+                        if (await _RoleManager.RoleExistsAsync(Role))
+                        {
+                            await _UserManager.AddToRoleAsync(user, Role);
+                            await transact.CommitAsync();
+                            _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                            return true;
+                        }
                     }
+                    return false;
                 }
-                await transact.RollbackAsync();
-                return false;
+                catch (Exception exp)
+                {
+                    _Logger.LogCritical(exp.Message);
+                    await transact.RollbackAsync();
+                    throw;
+                }
             }
         }
 
@@ -99,17 +118,25 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         {
             using (var transact = await Context.Database.BeginTransactionAsync())
             {
-                if (Context.Users.Any(io => io.PersonalNumber == entity.PersonalNumber))
+                try
                 {
-                    Context.Users.Update(entity);
-                    await Context.SaveChangesAsync();
-                    await transact.RollbackAsync();
-                    return true;
+                    if (Context.Users.Any(io => io.PersonalNumber == entity.PersonalNumber))
+                    {
+                        Context.Users.Update(entity);
+                        await Context.SaveChangesAsync();
+                        await transact.CommitAsync();
+                        _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                        return true;
+                    }
+                    return false;
                 }
-                await transact.CommitAsync();
-                _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
-                return false;
-            }
+                catch (Exception exp)
+                {
+                    _Logger.LogCritical(exp.Message);
+                    await transact.RollbackAsync();
+                    throw;
+                }
+        }
         }
     }
 }

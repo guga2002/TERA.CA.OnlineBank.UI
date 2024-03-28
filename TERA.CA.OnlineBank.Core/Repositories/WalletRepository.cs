@@ -20,17 +20,27 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         {
             using (var transact = await Context.Database.BeginTransactionAsync())
             {
-                if (!wallet.Any(io => io.UserId == entity.UserId && io.CurrencyId == entity.CurrencyId))
+                try
                 {
-                    await wallet.AddAsync(entity);
-                    await Context.SaveChangesAsync();
-                    await transact.CommitAsync();
-                    Context.ChangeTracker.DetectChanges();
-                    _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
-                    return true;
+                    if (!wallet.Any(io => io.UserId == entity.UserId && io.CurrencyId == entity.CurrencyId))
+                    {
+                        await wallet.AddAsync(entity);
+                        await Context.SaveChangesAsync();
+                        await transact.CommitAsync();
+                        Context.ChangeTracker.DetectChanges();
+                        _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                        return true;
+                    }
+                    await transact.RollbackAsync();
+                    return false;
                 }
-                await transact.RollbackAsync();
-                return false;
+                catch (Exception exp)
+                {
+                    _Logger.LogCritical(exp.Message);
+                    await transact.RollbackAsync();
+                    throw;
+                }
+
             }
         }
 
@@ -38,29 +48,37 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         {
             using (var transact = await Context.Database.BeginTransactionAsync())
             {
-                var firs = wallet.Where(io => io.UserId == entoty.UserId && io.CurrencyId == entoty.CurrencyId).FirstOrDefault();
-                if (firs != null)
+                try
                 {
-                    wallet.Remove(firs);
-                    await Context.SaveChangesAsync();
-                    await transact.CommitAsync();
-                    Context.ChangeTracker.DetectChanges();
-                    _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
-                    return true;
+                    var firs = wallet.Where(io => io.UserId == entoty.UserId && io.CurrencyId == entoty.CurrencyId).FirstOrDefault();
+                    if (firs != null)
+                    {
+                        wallet.Remove(firs);
+                        await Context.SaveChangesAsync();
+                        await transact.CommitAsync();
+                        Context.ChangeTracker.DetectChanges();
+                        _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                        return true;
+                    }
+                    return false;
                 }
-                await transact.RollbackAsync();
-                return false;
+                catch (Exception exp)
+                {
+                    _Logger.LogCritical(exp.Message);
+                    await transact.RollbackAsync();
+                    throw;
+                }
             }
         }
 
         public async Task<IEnumerable<Wallet>> GetAll()
         {
-            return await wallet.ToListAsync();
+            return await wallet.AsNoTracking().ToListAsync();
         }
 
         public async Task<IEnumerable<Wallet>> GetAllWithDetails()
         {
-            return await wallet.Include(io => io.Transactions).Include(io => io.Currency)
+            return await wallet.AsNoTracking().Include(io => io.Transactions).Include(io => io.Currency)
                 .ToListAsync();
         }
 
@@ -78,21 +96,29 @@ namespace TERA.CA.OnlineBank.Core.Repositories
         {
             using (var transact = await Context.Database.BeginTransactionAsync())
             {
-                var firs = await wallet.Where(io => io.UserId == entity.UserId).FirstOrDefaultAsync();
-                if (firs != null)
+                try
                 {
-                    firs.CurrencyId = entity.CurrencyId;
-                    firs.Amount = entity.Amount;
+                    var firs = await wallet.Where(io => io.UserId == entity.UserId).FirstOrDefaultAsync();
+                    if (firs != null)
+                    {
+                        firs.CurrencyId = entity.CurrencyId;
+                        firs.Amount = entity.Amount;
 
-                    wallet.Update(firs);
-                    await Context.SaveChangesAsync();
-                    await transact.CommitAsync();
-                    Context.ChangeTracker.DetectChanges();
-                    _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
-                    return true;
+                        wallet.Update(firs);
+                        await Context.SaveChangesAsync();
+                        await transact.CommitAsync();
+                        Context.ChangeTracker.DetectChanges();
+                        _Logger.LogInformation(Context.ChangeTracker.DebugView.ShortView);
+                        return true;
+                    }
+                    return false;
                 }
-                await transact.RollbackAsync();
-                return false;
+                catch (Exception exp)
+                {
+                    _Logger.LogCritical(exp.Message);
+                    await transact.RollbackAsync();
+                    throw;
+                }
             }
         }
     }
