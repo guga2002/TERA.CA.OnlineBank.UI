@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
+using System.Security.Claims;
 using TERA.CA.OnlineBank.Core.Data;
 using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
@@ -146,7 +147,17 @@ namespace TERA.CA.OnlineBank.Core.Repositories
                     await transact.RollbackAsync();
                     throw;
                 }
+            }
         }
+
+        public async  Task<bool> Signout()
+        {
+            if (_SignInManager.IsSignedIn(ClaimsPrincipal.Current))
+            {
+                await _SignInManager.SignOutAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

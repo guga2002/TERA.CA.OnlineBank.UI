@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TERA.Ca.OnlineBank.Domain.Interfaces;
 using TERA.Ca.OnlineBank.Domain.Models;
+using TERA.Ca.OnlineBank.Domain.Validations;
+using TERA.CA.OnlineBank.Core.Entities;
 using TERA.CA.OnlineBank.Core.Interfaces;
 
 namespace TERA.Ca.OnlineBank.Domain.Services
@@ -16,39 +13,95 @@ namespace TERA.Ca.OnlineBank.Domain.Services
         {
         }
 
-        public Task<bool> Create(UserModel entity)
+        public async Task<bool> Create(UserModel entity)
         {
-            throw new NotImplementedException();
+           if(entity==null)
+            {
+                throw new OnlineWalletException("Error while add entity in Users");
+            }
+            var mapped = mapper.Map<User>(entity);
+            var res=await work.UserRepository.Create(mapped);
+            await work.SaveChanges();
+            return res;
         }
 
-        public Task<bool> Delete(Guid entoty)
+        public async Task<bool> Delete(Guid entoty)//delete User
         {
-            throw new NotImplementedException();
+            var user = await work.UserRepository.GetById(entoty.ToString());
+            if (user != null)
+            {
+                var maped = mapper.Map<User>(user);
+                var res = await work.UserRepository.Delete(maped);
+                await work.SaveChanges();
+                return res;
+            }
+            return false;
         }
 
-        public Task<IEnumerable<UserModel>> GetAll()
+        public async Task<IEnumerable<UserModel>> GetAll()
         {
-            throw new NotImplementedException();
+            var user = await work.UserRepository.GetAll();
+            if (user is null)
+            {
+                throw new OnlineWalletException($"No Users Exist");
+            }
+            var mapped = mapper.Map<IEnumerable<UserModel>>(user);
+            return mapped;
         }
 
-        public Task<UserModel> GetById(Guid Id)
+        public async Task<UserModel> GetById(Guid Id)
         {
-            throw new NotImplementedException();
+            var user = await work.UserRepository.GetById(Id.ToString());
+            if(user is null)
+            {
+                throw new OnlineWalletException($"No user exist on this Id {Id}");
+            }
+            var mapped = mapper.Map<UserModel>(user);
+            return mapped;
         }
 
-        public Task<bool> Register(UserModel user)
+        public async Task<bool> Register(UserModel user)
         {
-            throw new NotImplementedException();
+            if(user is null)
+            {
+                throw new OnlineWalletException("User cann not be null while add");
+            }
+            var mapped = mapper.Map<User>(user);
+            var res=await work.UserRepository.Register(mapped, user.Password);
+            await work.SaveChanges();
+            return res;
         }
 
-        public Task<bool> SignIn(SignInModel model)
+        public async Task<bool> SignIn(SignInModel model)
         {
-            throw new NotImplementedException();
+            if (model == null || model.Username is  null || model.Password is  null)
+            {
+                throw new OnlineWalletException("Password and Username can not be null");
+            }
+            else
+            {
+                var res = await work.UserRepository.SignIn(model.Username, model.Password);
+                return res;
+            }
         }
 
-        public Task<bool> Update(UserModel entity)
+        public async Task<bool> Signout()
         {
-            throw new NotImplementedException();
+           var res= await work.UserRepository.Signout();
+            await work.SaveChanges();
+            return res;
+        }
+
+        public async Task<bool> Update(UserModel entity)
+        {
+            if(entity==null)
+            {
+                throw new OnlineWalletException(" Argument can not be null");
+            }
+            var mapped = mapper.Map<User>(entity);
+            var res=await work.UserRepository.Update(mapped);
+            await work.SaveChanges();
+            return res;
         }
     }
 }

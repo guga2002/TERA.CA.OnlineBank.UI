@@ -7,5 +7,6 @@ namespace TERA.Ca.OnlineBank.Domain.Interfaces
     {
         Task<bool> SignIn(SignInModel model);
         Task<bool> Register(UserModel user);
+        Task<bool> Signout();
     }
 }

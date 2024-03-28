@@ -13,6 +13,7 @@ namespace TERA.CA.OnlineBank.Core.Interfaces
         Task<bool> AsignToRole(string Id, string Role);
         Task<bool> SignIn(string UserName, string Password);
         Task<bool> Register(User user, string Password);
-        Task<bool> ResetPasword(string id, string old, string newpasswo)
+        Task<bool> ResetPasword(string id, string old, string newpasswo);
+        Task<bool> Signout();
     }
 }
