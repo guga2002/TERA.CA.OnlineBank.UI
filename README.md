@@ -19,15 +19,65 @@
 - **API Integration**: Communicates with the backend using RESTful APIs.
 - **Styling**: CSS frameworks (Bootstrap, Tailwind CSS, etc.) for responsive design.
 
-## Installation
+# Installation
 
 To set up the project locally, follow these steps:
 
-1. Clone the repository:
+Clone the repository:
 
    ```bash
    git clone https://github.com/guga2002/TERA.CA.OnlineBank.UI.git
    ```
+- Navigate to the project directory:
 
+```sh
+cd TERA.CA.OnlineBank.UI
+```
+- Install dependencies (if using npm or yarn):
+```sh
+npm install
+# or
+yarn install
+```
 
+- Start the development server:
+
+```sh
+npm start
+# or
+yarn start
+```
+
+Open your browser and navigate to http://localhost:3000 (or the specified port) to view the application.
+
+- Usage
+Once the application is running, users can:
+
+Contributions are welcome! Please fork the repository and create a pull request for any changes or enhancements.
+
+# Fork the repository.
+
+- Create your feature branch:
+
+```sh
+git checkout -b feature/YourFeature
+```
+
+- Commit your changes:
+  ```sh
+git commit -m "Add your feature"
+```
+
+- Push to the branch:
+```sh
+git push origin feature/YourFeature
+```
+
+# License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+Contact
+For any inquiries or issues, feel free to contact:
+
+Guga Apkhazava - aapkhazava22@gmail.com
 
