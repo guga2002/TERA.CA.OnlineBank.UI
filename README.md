@@ -66,7 +66,6 @@ git checkout -b feature/YourFeature
 ```
 
 - Commit your changes:
-- 
 ```sh
 git commit -m "Add your feature"
 ```
