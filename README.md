@@ -34,6 +34,7 @@ Clone the repository:
 cd TERA.CA.OnlineBank.UI
 ```
 - Install dependencies (if using npm or yarn):
+  
 ```sh
 npm install
 # or
@@ -47,6 +48,7 @@ npm start
 # or
 yarn start
 ```
+
 
 Open your browser and navigate to http://localhost:3000 (or the specified port) to view the application.
 
@@ -64,7 +66,8 @@ git checkout -b feature/YourFeature
 ```
 
 - Commit your changes:
-  ```sh
+- 
+```sh
 git commit -m "Add your feature"
 ```
 
